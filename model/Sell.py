@@ -2,6 +2,9 @@ class Sell:
     def __init__(self, sell_date=None, sell_total=None):
         self._sell_date = sell_date
         self._sell_total = sell_total
+    @property
+    def id(self):
+        return self._id
     
     @property
     def sell_date(self):

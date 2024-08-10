@@ -1,8 +1,9 @@
 class Product:
-    def __init__(self, name=None, category=None, marca=None, stock_actual=None, stock_sell=None, unid=None, size=None, color=None, expiration_date=None, material=None):
+    def __init__(self, name=None, category=None, marca=None, price=None,stock_actual=None, stock_sell=None, unid=None, size=None, color=None, expiration_date=None, material=None):
         self._name = name
         self._category = category
         self._marca = marca
+        self._price = price
         self._stock_actual = stock_actual
         self._stock_sell = stock_sell
         self._unid = unid
@@ -10,6 +11,9 @@ class Product:
         self._color = color
         self._expiration_date = expiration_date
         self._material = material
+    @property
+    def id(self):
+        return self._id
 
     @property
     def name(self):
@@ -34,6 +38,14 @@ class Product:
     @marca.setter
     def marca(self, value):
         self._marca = value
+    
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, value):
+        self._price = value
 
     @property
     def stock_actual(self):
