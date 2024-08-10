@@ -1,15 +1,15 @@
 class Product:
     def __init__(self, name=None, category=None, marca=None, stock_actual=None, stock_sell=None, unid=None, size=None, color=None, expiration_date=None, material=None):
-        self.name = name
-        self.category = category
-        self.marca = marca
-        self.stock_actual = stock_actual
-        self.stock_sell = stock_sell
-        self.unid = unid
-        self.size = size
-        self.color = color
-        self.expiration_date = expiration_date
-        self.material = material
+        self._name = name
+        self._category = category
+        self._marca = marca
+        self._stock_actual = stock_actual
+        self._stock_sell = stock_sell
+        self._unid = unid
+        self._size = size
+        self._color = color
+        self._expiration_date = expiration_date
+        self._material = material
 
     @property
     def name(self):
