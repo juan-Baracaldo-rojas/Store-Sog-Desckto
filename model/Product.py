@@ -1,4 +1,4 @@
-class Producto:
+class Product:
     def __init__(self, name=None, category=None, marca=None, stock_actual=None, stock_sell=None, unid=None, size=None, color=None, expiration_date=None, material=None):
         self.name = name
         self.category = category
