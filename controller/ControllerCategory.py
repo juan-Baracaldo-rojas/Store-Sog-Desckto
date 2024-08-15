@@ -5,7 +5,7 @@ import sqlite3
 
 # Añadir la raíz del proyecto al path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from view.view_metods_crud_category import MessageDeleteCategorySuccess,MessageErrorDeleteCategory,MessageIdNotFound,MessageDeleteCategory,MessageErrorUpdateCategory,MessageCategoryInsertSuccesfull,MessageErrorInsertCategory,seeAllCategories,MessageErrorSeeAllCategory,MessageUpdateCategory,MessageDeleteCategory
+from view.View_metods_crud_category import MessageDeleteCategorySuccess,MessageErrorDeleteCategory,MessageIdNotFound,MessageDeleteCategory,MessageErrorUpdateCategory,MessageCategoryInsertSuccesfull,MessageErrorInsertCategory,seeAllCategories,MessageErrorSeeAllCategory,MessageUpdateCategory,MessageDeleteCategory
 from model.Category import Category
 
 
