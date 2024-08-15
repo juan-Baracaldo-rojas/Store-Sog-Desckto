@@ -1,5 +1,5 @@
 def MessageCategoryInsertSuccesfull():
-    print("Categoría insertada exitosamente.") 
+    print("Categoría registrada exitosamente.") 
 
 def MessageUpdateCategory():
     print(f'Categoria actualizada')

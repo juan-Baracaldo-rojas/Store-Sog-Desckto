@@ -2,90 +2,91 @@ import sys
 import os
 import sqlite3
 
-
 # Añadir la raíz del proyecto al path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from view.view_metods_crud_category import MessageDeleteCategorySuccess,MessageErrorDeleteCategory,MessageIdNotFound,MessageDeleteCategory,MessageErrorUpdateCategory,MessageCategoryInsertSuccesfull,MessageErrorInsertCategory,seeAllCategories,MessageErrorSeeAllCategory,MessageUpdateCategory,MessageDeleteCategory
-from model.Category import Category
+from model.Product import Product
+from model.Sell import Sell
+from model.SellDetail import SellDetail
+from view.View_metods_crud_sell import MessageDeleteSell,MessageDeleteSellSuccess,MessageErrorDeleteSell,MessageErrorInsertSell,MessageErrorSeeAllSell,MessageErrorUpdateSell,MessageIdNotFound,MessageSellInsertSuccesfull,MessageUpdateSell,seeAllSales
 
 
 def start():
-    print(f'Controller Category')
+    print(f'Controller Sell')
 
 # CRUD CATEGORY
 
-def insert_category(category):
+def insert_sell(sell):
     conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
     
     try:
         cursor = conn.cursor()
         
         cursor.execute('''
-            INSERT INTO Categoria (Nombre,descripcion) VALUES (?,?)
-        ''', (category.name,category.description))
+            INSERT INTO venta (Fecha,Total) VALUES (?,?)
+        ''', (sell.sell_date,sell.sell_total))
         
         conn.commit()
-       
+        MessageSellInsertSuccesfull()
     except sqlite3.Error as e:
-        MessageErrorInsertCategory(e)
+        MessageErrorInsertSell(e)
     finally:
         # Cerrar la conexión
         conn.close()
 
 
-def update_category(category,id):
+def update_sell(sell,id):
     conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
     
     try:
         cursor = conn.cursor()
         
         cursor.execute('''
-             UPDATE categoria
-            SET nombre = ?,
-            descripcion= ?
-            WHERE id = ?
-        ''', (category.name,category.description,id))
+             UPDATE venta
+            SET Fecha = ?,
+            total= ?
+            WHERE Id_venta = ?
+        ''',(sell.sell_date,sell.sell_total,id))
         
         conn.commit()
-        MessageUpdateCategory()
+        MessageUpdateSell()
        
     except sqlite3.Error as e:
-        MessageErrorUpdateCategory(e)
+        MessageErrorUpdateSell(e)
     finally:
         conn.close() 
 
 
-def delete_category(id):
+def delete_Sell(id):
     conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
     
     try:
-        opc=MessageDeleteCategory()
+        opc=MessageDeleteSell()
         if opc=='1':
             cursor = conn.cursor()
             cursor.execute('''
-                DELETE FROM categoria
-                WHERE id = ?
+                DELETE FROM venta
+                WHERE Id_venta = ?
             ''', (id,))
             conn.commit()
             if cursor.rowcount > 0:
-                MessageDeleteCategorySuccess()
+                MessageDeleteSellSuccess()
             else:
                 MessageIdNotFound()
        
     except sqlite3.Error as e:
-        MessageErrorUpdateCategory(e)
+        MessageErrorUpdateSell(e)
     finally:
         conn.close()
 
-def see_all_categories():
+def see_all_Sales():
     try:
         conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
         cursor=conn.cursor()
-        cursor.execute('SELECT * FROM Categoria')
+        cursor.execute('SELECT * FROM venta')
         rows=cursor.fetchall()
-        seeAllCategories(rows)
+        seeAllSales(rows)
     except sqlite3.Error as e:
-        MessageErrorSeeAllCategory(e)
+        MessageErrorSeeAllSell(e)
     finally:
         conn.close()
 
@@ -93,9 +94,9 @@ def see_all_categories():
 
 if __name__ == "__main__":
     start()
-    category=Category('Ropa','Categoria')
+    sell=Sell('10-12-2022',99999)
     # Llamar a la función de inserción
-    # insert_category(category)
-    # update_category(category,2)
-    # delete_category(6)
-    # see_all_categories()
+    insert_sell(sell)
+    # update_sell(sell,2)
+    # delete_Sell(2)
+    see_all_Sales()
