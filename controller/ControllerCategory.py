@@ -73,7 +73,7 @@ def delete_category(id):
                 MessageIdNotFound()
        
     except sqlite3.Error as e:
-        MessageErrorUpdateCategory(e)
+        MessageErrorDeleteCategory(e)
     finally:
         conn.close()
 
