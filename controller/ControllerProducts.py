@@ -85,7 +85,7 @@ def delete_product(id):
     finally:
         conn.close()
 
-def see_all_Sales():
+def all_Products():
     try:
         conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
         cursor=conn.cursor()
@@ -96,15 +96,15 @@ def see_all_Sales():
         MessageErrorSeeAllProduct(e)
     finally:
         conn.close()
-
+        return rows
 
 
 if __name__ == "__main__":
     start()
     # product=Product('10-12-2022',99999)
-    product = Product("Camiseta Formal","Ropa Formal", "lacoste", 29.99,  100,  50,  "unidad", "M", "Azul", None,  "Poliéster"  )
+    product = Product("Dulces","Comestibles", "colombina", 29.99,  100,  50,  "unidad", "No_Aplica", "Azul", "10-12-2023",  "Poliéster"  )
     # Llamar a la función de inserción
-    # insert_product(product)
+    insert_product(product)
     # update_product(product,2)
     # delete_product(2)
-    # see_all_Sales()
+    # all_Sales()

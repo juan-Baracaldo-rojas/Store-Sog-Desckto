@@ -73,7 +73,7 @@ def delete_detail_product(product_ID,sell_ID):
     finally:
         conn.close()
 
-def see_all_detail_sell():
+def all_detail_sell():
     try:
         conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
         cursor=conn.cursor()

@@ -77,7 +77,7 @@ def delete_category(id):
     finally:
         conn.close()
 
-def see_all_categories():
+def all_categories():
     try:
         conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
         cursor=conn.cursor()
@@ -88,6 +88,7 @@ def see_all_categories():
         MessageErrorSeeAllCategory(e)
     finally:
         conn.close()
+        return rows
 
 
 
@@ -98,4 +99,4 @@ if __name__ == "__main__":
     # insert_category(category)
     # update_category(category,2)
     # delete_category(6)
-    # see_all_categories()
+    # all_categories()
