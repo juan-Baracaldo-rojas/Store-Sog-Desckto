@@ -168,6 +168,8 @@ def DowloadCategory():
     df=pd.DataFrame(rowsCategory,columns=["Id","Nombre","Descripcion"])
     df.to_excel('../dowloads/Categoria.xlsx', index=False)
 
+def ListEmpoderamiento():
+    return ["Ten una cuenta visible en Google my bussiness","Aparecer en google maps","Usa una red social para crear tu perfil de empresa"]
 if __name__ == "__main__":
     start()
     # all_products_invetory_Expire()
@@ -180,4 +182,4 @@ if __name__ == "__main__":
     # HistorySalesYear("2022")
     # DowloadSalesDay('10-12-2022')
     # DowloadProducts()
-    DowloadCategory()
+    # DowloadCategory()
