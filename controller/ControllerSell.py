@@ -90,6 +90,8 @@ def see_all_Sales():
     finally:
         conn.close()
 
+def optionSell():
+    return ["Papeleria","Jugueteria","Impresiones","Ropa","Comestibles","Zapatos"] 
 
 
 if __name__ == "__main__":
