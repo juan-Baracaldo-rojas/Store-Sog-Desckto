@@ -4,21 +4,20 @@ def styleDowloads():
         font-size:20px;
     }
     QDateEdit{
-    padding: 15px 20px;
-        margin:2px;
+    padding: 8px 20px;
+        margin:auto;
     }
     QPushButton {
         background-color: #fff; 
         border:1px solid #000;
         border-radius:10%;
         color: black;
-        padding: 15px 20px;
-        margin:2px;
+        padding: 8px 20px;
+        margin:auto;
         font-family:sans-serif;
         text-align: center;
         text-decoration: none;
         font-size: 16px;
-        margin: 4px 2px;
         
     }
 

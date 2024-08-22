@@ -30,6 +30,7 @@ class Dowloads(QWidget):
         self.show()
 
     def generate_form(self):
+        
         image_label_dowloads = QLabel()
         pixmap = QPixmap(self.resource_path('../../Img/ico_descargas.png'))  # Ruta relativa de la imagen
         image_label_dowloads.setAlignment(Qt.AlignmentFlag.AlignCenter)

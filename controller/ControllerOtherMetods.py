@@ -168,7 +168,7 @@ def DowloadCategory():
     df=pd.DataFrame(rowsCategory,columns=["Id","Nombre","Descripcion"])
     df.to_excel('../dowloads/Categoria.xlsx', index=False)
 
-def ListEmpoderamiento():
+def empowermentList():
     return ["Ten una cuenta visible en Google my bussiness","Aparecer en google maps","Usa una red social para crear tu perfil de empresa"]
 if __name__ == "__main__":
     start()
