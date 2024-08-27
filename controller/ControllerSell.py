@@ -93,6 +93,24 @@ def see_all_Sales():
 def optionSell():
     return ["Papeleria","Jugueteria","Impresiones","Ropa","Comestibles","Zapatos"] 
 
+def papelerySalesCondition(type_sales):
+    return type_sales == "Papeleria"
+
+def toyStoreSalesCondition(type_sales):
+    return type_sales == "Jugueteria"
+
+def printerSalesCondition(type_sales):
+    return type_sales == "Impresiones"
+
+def ropeSalesCondition(type_sales):
+    return type_sales == "Ropa"
+
+def candySalesCondition(type_sales):
+    return type_sales == "Comestibles"
+
+def shoesStoreSalesCondition(type_sales):
+    return type_sales == "Zapatos"
+
 
 if __name__ == "__main__":
     start()
