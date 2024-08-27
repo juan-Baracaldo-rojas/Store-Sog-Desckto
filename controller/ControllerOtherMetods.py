@@ -2,6 +2,7 @@ import sys
 import os
 import sqlite3
 import pandas as pd
+import random
 
 # Añadir la raíz del proyecto al path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -30,6 +31,7 @@ def all_products_invetory_Expire():
         conn.close()
     
 def list_best_products():
+    rows=[]
     try:
         conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
         cursor=conn.cursor()
@@ -41,8 +43,9 @@ def list_best_products():
         MessageErrorSeeListBestProducts(e)
     finally:
         conn.close()
- 
+        return rows
 def best_product():
+    rows=[]
     try:
         conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
         cursor=conn.cursor()
@@ -54,6 +57,7 @@ def best_product():
         MessageErrorSeeBestProducts(e)
     finally:
         conn.close()
+        return rows
  
 def searchProductList(search_word):
     try:
@@ -86,19 +90,74 @@ def BillProductList(id_sell):
     finally:
         conn.close()
 
+def dataGraficLineHistorySalesDaily(dateReport):
+    rows=[]
+    try:
+        conn =sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__),'..', 'database', 'DB_Store_sog.db')))
+        cursor=conn.cursor()
+        cursor.execute('SELECT v.Fecha,sum(v.total) as total_dia FROM  Venta v  WHERE v.Fecha= ?',(dateReport,))
+        rows=cursor.fetchall()
+        viewHistorySellByDay(dateReport,rows)
+    except sqlite3.Error as e:
+        MessageErrorHistorySalesByDay(dateReport,e)
+    finally:
+        conn.close()
+        return rows
+
+def dataGraficLineHistorySalesMonth(month,year):
+    rows=[]
+    try:
+        conn=sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__),'..','database', 'DB_Store_sog.db')))
+        cursor=conn.cursor()
+        cursor.execute('''
+                SELECT 
+                       DISTINCT substr(v.Fecha, 1,2) AS dia,
+                       sum(v.total) as total_dia   
+                FROM  Venta v   
+                WHERE substr(v.Fecha, 4,2) = ? and substr(v.Fecha, 7, 4)  =?; 
+                     ''',(month,year))
+        rows=cursor.fetchall()
+        viewHistorySellByMonth(month,year,rows)
+    except sqlite3.Error as e:
+        MessageErrorHistorySalesByMonth(month,year,e)
+    finally:
+        conn.close()
+        return rows
+    
+def dataGraficLineHistorySalesYear(year):
+    rows=[]
+    try:
+        conn=sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__),'..','database', 'DB_Store_sog.db')))
+        cursor=conn.cursor()
+        cursor.execute("""
+            SELECT 
+                DISTINCT substr(v.Fecha, 4,2) AS mes,  
+                   sum (v.total)	
+            FROM  Venta v 
+            WHERE substr(v.Fecha, 7, 4)  =?;
+                       """,(year,))
+        rows=cursor.fetchall()
+        viewHistorySellByYear(year,rows)
+    except sqlite3.Error as e:
+        MessageErrorHistorySalesByYear(year,e)
+    finally:
+        conn.close()
+        return rows
 def HistorySalesDay(dateReport):
+    rows=[]
     try:
         conn =sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__),'..', 'database', 'DB_Store_sog.db')))
         cursor=conn.cursor()
         cursor.execute('SELECT p.nombre,de.cantidad,de.precio_unitario,v.Fecha,de.sub_total  FROM Detalle_venta de  JOIN Producto p ON de.id_producto=p.id_producto  JOIN Venta v on de.id_venta=v.id_venta WHERE v.Fecha= ?',(dateReport,))
         rows=cursor.fetchall()
         viewHistorySellByDay(dateReport,rows)
-# def dowloadProducts():
+
     except sqlite3.Error as e:
         MessageErrorHistorySalesByDay(dateReport,e)
     finally:
         conn.close()
         return rows
+
 
 def HistorySalesMonth(month,year):
     try:
@@ -170,11 +229,29 @@ def DowloadCategory():
 
 def empowermentList():
     return ["Ten una cuenta visible en Google my bussiness","Aparecer en google maps","Usa una red social para crear tu perfil de empresa"]
+
+def optionsComboBoxGrafics():
+    return  ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembte"]
+
+def colorGenerator(cant):
+    listColor=[]
+    for cont in range(0,cant,1):
+        r=random.randint(0,255)
+        g=random.randint(0,255)
+        b=random.randint(0,255)
+        listColor.append((r,g,b))
+        print(f'color {cont}')
+        print(f'({r},{g},{b})')
+    return listColor
 if __name__ == "__main__":
     start()
     # all_products_invetory_Expire()
-    # list_best_products()
-    # best_product()
+    # print(f'{list_best_products()}')
+    # print(dataGraficLineHistorySalesDaily('10-12-2022')); 
+    # print(dataGraficLineHistorySalesMonth('12','2022')); 
+    # print(dataGraficLineHistorySalesYear('2022')); 
+    # colorGenerator(4)
+    # print(best_product())
     # searchProductList("ca")
     # BillProductList(1)
     # HistorySalesDay('10-12-2022')

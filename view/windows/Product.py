@@ -60,6 +60,7 @@ class Product(QWidget):
         spiner_price_product=QSpinBox()
         spiner_price_product.setObjectName("spiner_price_product")
         spiner_price_product.setMaximum(9999999)
+        spiner_price_product.setMinimum(0)
         spiner_price_product.setAlignment(Qt.AlignmentFlag.AlignCenter)
        
         label_unid_product=QLabel("Escoja la unidad del producto")
