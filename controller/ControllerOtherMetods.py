@@ -46,6 +46,7 @@ def list_best_products():
     finally:
         conn.close()
         return rows
+
 def best_product():
     rows=[]
     try:
@@ -262,8 +263,12 @@ def empowermentList():
 def optionsComboBoxGrafics():
     return  ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembte"]
 
-def columnHeader():
-    return ["nombre","cantidad","preciuo unidad","fecha","subtotal" ]
+def columnHeaderTableSeeSales():
+    return ["Nombre","Cantidad a vencer","Preciuo Unidad","Fecha","Subtotal" ]
+
+def columHeaderTableProductsExpiration():\
+    return ["Id_producto","Nombre","Cantidad","Fecha_vencimiento" ]
+
 def colorGenerator(cant):
     listColor=[]
     for cont in range(0,cant,1):

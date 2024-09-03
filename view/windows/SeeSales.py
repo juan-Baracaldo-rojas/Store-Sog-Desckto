@@ -116,7 +116,7 @@ from PyQt6.QtCore import Qt, QDate
 from PyQt6.QtGui import QPixmap
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from view.QSS.SeeSalesQSS import styleSeeSales      
-from controller.ControllerOtherMetods import HistorySalesDay, columnHeader
+from controller.ControllerOtherMetods import HistorySalesDay, columnHeaderTableSeeSales
 
 class SeeSales(QWidget):
     def resource_path(self, relative_path):
@@ -170,7 +170,7 @@ class SeeSales(QWidget):
         self.table_widget.setColumnCount(5)  # Número de columnas
         self.table_widget.setObjectName("customTableWidget") 
         self.table_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.table_widget.setHorizontalHeaderLabels(columnHeader())
+        self.table_widget.setHorizontalHeaderLabels(columnHeaderTableSeeSales())
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.fill_table(self.data)
         
