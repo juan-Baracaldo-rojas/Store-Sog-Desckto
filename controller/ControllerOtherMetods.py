@@ -19,16 +19,18 @@ def start():
     print(f'Other Metods')
     
 def all_products_invetory_Expire():
+    rows=[]
     try:
         conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
         cursor=conn.cursor()
-        cursor.execute('SELECT * FROM Producto WHERE stock_actual>0 and fecha_vencimiento not null;')
+        cursor.execute('SELECT id_producto,nombre,stock_actual as cantidad_disponible,fecha_vencimiento FROM Producto WHERE stock_actual>0 and fecha_vencimiento not null;')
         rows=cursor.fetchall()
         SeeAllExpireProductDetailSells(rows)
     except sqlite3.Error as e:
         MessageErrorSeeAllExpireProducts(e)
     finally:
         conn.close()
+        return rows
     
 def list_best_products():
     rows=[]
@@ -143,6 +145,7 @@ def dataGraficLineHistorySalesYear(year):
     finally:
         conn.close()
         return rows
+    
 def HistorySalesDay(dateReport):
     rows=[]
     try:
@@ -157,7 +160,6 @@ def HistorySalesDay(dateReport):
     finally:
         conn.close()
         return rows
-
 
 def HistorySalesMonth(month,year):
     try:
@@ -260,6 +262,8 @@ def empowermentList():
 def optionsComboBoxGrafics():
     return  ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembte"]
 
+def columnHeader():
+    return ["nombre","cantidad","preciuo unidad","fecha","subtotal" ]
 def colorGenerator(cant):
     listColor=[]
     for cont in range(0,cant,1):
