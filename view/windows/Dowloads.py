@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt, QDate
 from PyQt6.QtGui import QIcon, QPixmap, QFont
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from view.QSS.DowloadsQSS import styleDowloads
+from controller.ControllerOtherMetods import DowloadCategory,DowloadProducts,DowloadSalesDay
 
 class Dowloads(QWidget):
     def resource_path(self, relative_path):
@@ -41,25 +42,31 @@ class Dowloads(QWidget):
         label_date_dowload_sales.setObjectName("date_dowload_sales")
         label_date_dowload_sales.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
-        qdate_dowload_sales = QDateEdit()
-        qdate_dowload_sales.setCalendarPopup(True)
-        qdate_dowload_sales.setDate(QDate.currentDate())
+        self.qdate_dowload_sales = QDateEdit()
+        self.qdate_dowload_sales.setCalendarPopup(True)
+        self.qdate_dowload_sales.setDate(QDate.currentDate())
 
         btn_dowloads_products=QPushButton("Descargar productos")
         btn_dowloads_products.setObjectName("btn_dowloads_products")
+        btn_dowloads_products.clicked.connect(DowloadProducts)
         
         btn_dowloads_category=QPushButton("Descargar Categoria")
         btn_dowloads_category.setObjectName("btn_dowloads_category")
+        btn_dowloads_category.clicked.connect(DowloadCategory)
         
+        date_select=self.qdate_dowload_sales.date()
+        date_string=date_select.toString("dd-MM-yyyy")
         btn_download_day_sales=QPushButton("Descargar Ventas del dia")
         btn_download_day_sales.setObjectName("btn_download_day_sales")
+        btn_download_day_sales.clicked.connect(lambda: DowloadSalesDay(self.qdate_dowload_sales.date().toString("dd-MM-yyyy")))
+
 
 
         principalWidget=QWidget()
         layout=QVBoxLayout(principalWidget)
         layout.addWidget(image_label_dowloads)
         layout.addWidget(label_date_dowload_sales)
-        layout.addWidget(qdate_dowload_sales)
+        layout.addWidget(self.qdate_dowload_sales)
         layout.addWidget(btn_dowloads_products)
         layout.addWidget(btn_dowloads_category)
         layout.addWidget(btn_download_day_sales)

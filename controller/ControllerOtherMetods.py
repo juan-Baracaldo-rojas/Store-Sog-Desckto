@@ -210,22 +210,49 @@ def HistorySalesYear(year):
         conn.close()
 
 def DowloadSalesDay(date):
+    # Definir el directorio donde deseas guardar el archivo
+    output_directory = '../../downloads'
+
+    # Verificar si el directorio existe, si no, crearlo
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    # Ahora puedes guardar tu archivo en este directorio
+    file_path = os.path.join(output_directory, f'Ventas_{date}.xlsx')
     rowsSales=HistorySalesDay(date)
     print(f'\n\n\n\nDescargando Ventas de {date}')
     df=pd.DataFrame(rowsSales,columns=["Nombre Producto","Cantidad","Precio Unitario","Fecha","Sub Total"])
-    df.to_excel(f'../dowloads/Ventas_{date}.xlsx', index=False)
+    df.to_excel(file_path, index=False)
 
 def DowloadProducts():
+    # Definir el directorio donde deseas guardar el archivo
+    output_directory = '../../downloads'
+
+    # Verificar si el directorio existe, si no, crearlo
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    # Ahora puedes guardar tu archivo en este directorio
+    file_path = os.path.join(output_directory, 'Productos.xlsx')
     rowsProducts=all_Products()
     print(f'\n\n\n\nDescargando Productos ')
     df=pd.DataFrame(rowsProducts,columns=["Id","Nombre","Categoria","Marca","Precio","Stock Actual","Stock Vendido","Unidad","Tamaño","Color","Fecha de expiracion","Material"])
-    df.to_excel('../dowloads/Productos.xlsx', index=False)
+    df.to_excel(file_path, index=False)
 
 def DowloadCategory():
+    # Definir el directorio donde deseas guardar el archivo
+    output_directory = '../../downloads'
+
+    # Verificar si el directorio existe, si no, crearlo
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+     # Ahora puedes guardar tu archivo en este directorio
+    file_path = os.path.join(output_directory, 'Categoria.xlsx')
     rowsCategory=all_categories()
     print(f'\n\n\nDescargando Categoria ')
     df=pd.DataFrame(rowsCategory,columns=["Id","Nombre","Descripcion"])
-    df.to_excel('../dowloads/Categoria.xlsx', index=False)
+    df.to_excel(file_path, index=False)
 
 def empowermentList():
     return ["Ten una cuenta visible en Google my bussiness","Aparecer en google maps","Usa una red social para crear tu perfil de empresa"]
