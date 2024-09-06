@@ -7,7 +7,7 @@ import random
 # Añadir la raíz del proyecto al path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from view.View_other_metods import MessageErrorHistorySalesByYear,viewHistorySellByYear,MessageErrorHistorySalesByMonth,viewHistorySellByMonth,MessageErrorHistorySalesByDay,viewHistorySellByDay,MessageErrorBillProductList,MessageErrorProductSearch,ViewProductsSell,MessageErrorSeeBestProducts,MessageErrorSeeListBestProducts,ViewTop10,MessageErrorSeeAllExpireProducts,MessageBestProduct,MessageDowloadFailes,MessageDowloadOption,MessageDowloadSucces,SeeAllDataSearch,viewDataGraficHistogramBestSales,viewDataGraficLineSalesForDay,viewDateBill,SeeAllExpireProductDetailSells
+from view.View_other_metods import MessageErrorHistorySalesByYear,viewHistorySellByYear,MessageErrorHistorySalesByMonth,viewHistorySellByMonth,MessageErrorHistorySalesByDay,viewHistorySellByDay,MessageErrorBillProductList,MessageErrorProductSearch,ViewProductsSell,MessageErrorSeeBestProducts,MessageErrorSeeListBestProducts,ViewTop10,MessageErrorSeeAllExpireProducts,MessageBestProduct,MessageDowloadFailes,MessageDowloadOption,MessageDowloadSucces,SeeAllDataSearch,viewDataGraficHistogramBestSales,viewDataGraficLineSalesForDay,viewDateBill,SeeAllExpireProductDetailSells,MessageErrorUpdateUser,MessageUpdateUser
 from model.Category import Category
 from model.Product import Product
 from model.Sell import Sell
@@ -268,6 +268,30 @@ def columnHeaderTableSeeSales():
 
 def columHeaderTableProductsExpiration():\
     return ["Id_producto","Nombre","Cantidad","Fecha_vencimiento" ]
+
+def update_user(user):
+    conn = sqlite3.connect(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'DB_Store_sog.db')))
+    
+    try:
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            UPDATE local SET 
+                    nombre=? ,
+                    tipo1=? ,
+                    tipo2=? ,
+                    tipo3=?             
+''',
+          (user.name,user.type_1,user.type_2,user.type_3))
+  
+        
+        conn.commit()
+        MessageUpdateUser()
+       
+    except sqlite3.Error as e:
+        MessageErrorUpdateUser(e)
+    finally:
+        conn.close() 
 
 def colorGenerator(cant):
     listColor=[]

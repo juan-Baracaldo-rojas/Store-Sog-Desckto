@@ -11,7 +11,14 @@ def MessageDowloadSucces(dateDowload, typeArchive):
 
 def MessageDowloadFailes(dateDowload, typeArchive):
     print(f'No se pudo descargar el archibo {typeArchive}:\nfecha descarga {dateDowload}')
+
+def MessageUpdateUser():
+    print(f'Local modificado con exito')
+
+def MessageErrorUpdateUser(e):
+    print(f'No se pudo actualizar el usuario: {e}')
     
+
 def MessageDowloadOption(typeArchive):
     opc=input(f'\nEsta seguro que desea descargar {typeArchive}  de venta.\n1.Si\n2.No\n')
     return opc

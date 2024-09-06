@@ -5,6 +5,8 @@ from PyQt6.QtCore import Qt, QDate
 from PyQt6.QtGui import QIcon, QPixmap, QFont
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from view.QSS.RegisterQSS import qssStyleCategory
+from controller.ControllerOtherMetods import update_user
+from model.User import Local
 
 class Register(QWidget):
     def resource_path(self, relative_path):
@@ -41,8 +43,8 @@ class Register(QWidget):
         label_name_local.setObjectName("name_local")
         label_name_local.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        input_name_local=QLineEdit()
-        input_name_local.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.input_name_local=QLineEdit()
+        self.input_name_local.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         label_type_local=QLabel("Escoga las 3 principales funciones de su local")
         label_type_local.setObjectName("type_local")
@@ -57,7 +59,7 @@ class Register(QWidget):
         # layout.addWidget(title_register,0,0,1,2)
         layout.addWidget(image_label,0,0,1,4)
         layout.addWidget(label_name_local,1,0,1,4)
-        layout.addWidget(input_name_local,2,0,1,4)
+        layout.addWidget(self.input_name_local,2,0,1,4)
         layout.addWidget(label_type_local,3,0,1,4)
 
         layout.setObjectName("container-register")
@@ -76,8 +78,30 @@ class Register(QWidget):
 
         btnSave=QPushButton('Guardar')
         btnSave.setObjectName("btn_Save")
+        btnSave.clicked.connect(self.modifyLocal)
         layout.addWidget(btnSave,10,0,1,4)
         self.setLayout(layout)
+
+    def get_selected_options(self):
+        selected_options = []
+        for checkbox in self.checkboxes:
+            if checkbox.isChecked():
+                selected_options.append(checkbox.text())  # Agregar el texto del checkbox seleccionado a la lista
+        return selected_options
+
+    def modifyLocal(self):
+        options=self.get_selected_options()
+        condition_lenght_minimun_1=len(options) ==1
+        condition_lenght_minimun_2=len(options) ==2
+        condition_lenght_minimun_3=len(options) ==3
+        local=""
+        if condition_lenght_minimun_1:
+            local=Local(self.input_name_local.text(),options[0],"Jugueteria","Papeleria")
+        if condition_lenght_minimun_2:
+            local=Local(self.input_name_local.text(),options[0],options[1],"Papeleria")
+        if condition_lenght_minimun_3:
+            local=Local(self.input_name_local.text(),options[0],options[1],options[2])
+        update_user(local)
 
     def check_limit(self):
         # Contar cuántos checkboxes están seleccionados
