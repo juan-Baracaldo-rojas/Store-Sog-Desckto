@@ -32,25 +32,22 @@ class CashRegister(QWidget,):
         return widget_search
     
     def __init__(self,typeSale):
-        self.typeSale=typeSale
         super().__init__()
+        self.typeSale=typeSale
+        self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.init_ui()
 
     def init_ui(self):
         # Configuración de la ventana principal
         self.setWindowTitle('Login')
         # self.setGeometry(100, 100, 300, 650)  # Ajustar la geometría de la ventana
-        self.setFixedSize( 1200, 810)
+        self.setFixedSize( 1600, 810)
         self.generate_form()
-        self.show()
+        # self.show()
     
 
     def generate_form(self):
        
-
-        
-
-
         principal_widget=QWidget()
         principal_layout=QVBoxLayout(principal_widget)
 
@@ -70,7 +67,7 @@ class CashRegister(QWidget,):
 
         # Envolver los resultados en un QWidget
         # widget_resultados.setLayout(self.layout_resultados)
-        widget_resultados.setFixedSize(1180, 250)  # Establecer tamaño fijo al QWidget
+        widget_resultados.setFixedSize(1550, 250)  # Establecer tamaño fijo al QWidget
 
         # Configurar la tabla para mostrar datos de productos
         self.tabla_productos = QTableWidget(self)
@@ -144,15 +141,15 @@ class CashRegister(QWidget,):
         
         self.label_header_nombre_producto = QLabel("Nombre producto")
         self.label_header_nombre_producto.setFont(QFont("Arial",12))
-        self.label_header_nombre_producto.setFixedSize(540,30)
+        self.label_header_nombre_producto.setFixedSize(500,30)
 
         self.label_header_num_pedido = QLabel("Num Pedido")
         self.label_header_num_pedido.setFont(QFont("Arial",12))
-        self.label_header_num_pedido.setFixedSize(100,30)
+        self.label_header_num_pedido.setFixedSize(120,30)
       
         self.label_header_fecha_vencimiento = QLabel("Fecha vencimiento")
         self.label_header_fecha_vencimiento.setFont(QFont("Arial",12))
-        self.label_header_fecha_vencimiento.setFixedSize(150,30)
+        self.label_header_fecha_vencimiento.setFixedSize(200,30)
 
         self.label_header_cantidad = QLabel("Cantidad")
         self.label_header_cantidad.setFont(QFont("Arial",12))
@@ -265,7 +262,12 @@ class CashRegister(QWidget,):
         print(f'Cancel')
     def create_bill(self):
         print(f'Cancel')
-app = QApplication(sys.argv)
-app.setStyleSheet(styleCashResgister())
-window = CashRegister("Zapatos")
-sys.exit(app.exec())
+
+def main():
+    app = QApplication(sys.argv)
+    ventana = CashRegister()
+    ventana.show()
+    sys.exit(app.exec())
+
+if __name__ == '__main__':
+    main()

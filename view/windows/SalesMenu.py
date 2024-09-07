@@ -4,6 +4,7 @@ import os
 from PyQt6.QtWidgets import QApplication, QWidget, QComboBox, QLabel, QPushButton, QVBoxLayout
 from PyQt6.QtCore import Qt
 
+from CashRegister import CashRegister
 from PyQt6.QtGui import QPixmap
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from view.QSS.SalesMenuQSS import styleSalesMenuQSS
@@ -52,7 +53,7 @@ class SalesMenu(QWidget):
 
       btn_sell = QPushButton("IR A CAJA")
       btn_sell.setObjectName("btn_sell")
-    #   btn_sell.clicked.connect(lambda: self.show_cash_register(self.type_sell_combo_box.currentText()))
+      btn_sell.clicked.connect(lambda: self.show_cash_register(self.type_sell_combo_box.currentText()))
 
       layout.addWidget(image_label_sales_menu)
       layout.addWidget(label_title_sales_menu)
@@ -61,11 +62,11 @@ class SalesMenu(QWidget):
 
       self.setLayout(layout)
     
-    # def show_cash_register(self, type_sale):
-    #     if self.cash_register_window:
-    #         self.cash_register_window.close()
-    #     app = CashRegister(type_sale)
-    #     app.show()
+    def show_cash_register(self, type_sale):
+        # if self.cash_register_window:
+        #     self.cash_register_window.close()
+        self.app = CashRegister(type_sale)
+        self.app.show()
 
 
 app = QApplication(sys.argv)
