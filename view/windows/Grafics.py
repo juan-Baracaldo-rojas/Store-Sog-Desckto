@@ -29,6 +29,7 @@ class Grafics(QWidget):
     
     def __init__(self):
         super().__init__()
+        self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.init_ui()
 
     def init_ui(self):
@@ -37,7 +38,7 @@ class Grafics(QWidget):
         self.setFixedHeight(820)
         self.setFixedWidth(1450)
         self.generate_form()
-        self.show()
+        # self.show()
 
     def GraficTop10(self):
         # Datos para el histograma
@@ -210,8 +211,11 @@ class Grafics(QWidget):
         self.setLayout(layout_principal)
         
    
-app = QApplication(sys.argv)
-app.setStyleSheet(styleGrafics())
-window = Grafics()
-window.show()
-sys.exit(app.exec())
+def main():
+    app = QApplication(sys.argv)
+    ventana = Grafics()
+    ventana.show()
+    sys.exit(app.exec())
+
+if __name__ == '__main__':
+    main()

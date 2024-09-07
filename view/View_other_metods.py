@@ -12,6 +12,15 @@ def MessageDowloadSucces(dateDowload, typeArchive):
 def MessageDowloadFailes(dateDowload, typeArchive):
     print(f'No se pudo descargar el archibo {typeArchive}:\nfecha descarga {dateDowload}')
 
+def MessageDayliReport():
+    print(f'Reporte Diarias')
+
+def MessageMonthReport():
+    print(f'Reporte Mensual')
+
+def MessageYearReport():
+    print(f'Reporte año')
+
 def MessageUpdateUser():
     print(f'Local modificado con exito')
 
