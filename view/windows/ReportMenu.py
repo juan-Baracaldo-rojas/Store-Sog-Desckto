@@ -60,17 +60,17 @@ class ReportMenu(QWidget):
 
         self.setLayout(layout)
     def  reportDaily(self):
-        self.app=Grafics()
+        self.app=Grafics('day')
         self.app.show()
         MessageDayliReport()        
     
     def  reportMonth(self):
-        self.app=Grafics()
+        self.app=Grafics('month')
         self.app.show()
         MessageMonthReport()
  
     def  reportYear(self):
-        self.app=Grafics()
+        self.app=Grafics("year")
         self.app.show()
         MessageYearReport()
 

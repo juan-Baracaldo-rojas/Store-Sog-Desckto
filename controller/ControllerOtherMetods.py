@@ -93,6 +93,34 @@ def BillProductList(id_sell):
     finally:
         conn.close()
 
+def numberMonth(month):
+    numero=0
+    if "Enero" == month:
+        numero=1
+    if "Febrero" == month:
+        numero=2
+    if "Marzo" == month:
+        numero=3
+    if "Abril" == month:
+        numero=4
+    if "Mayo" == month:
+        numero=5
+    if "Junio" == month:
+        numero=6
+    if "Julio" == month:
+        numero=7
+    if "Agosto" == month:
+        numero=8
+    if "Septiembre" == month:
+        numero=9
+    if "Octubre" == month:
+        numero=10
+    if "Noviembre" == month:
+        numero=11
+    if "Diciembte" == month:
+        numero=12
+    return numero
+
 def dataGraficLineHistorySalesDaily(dateReport):
     rows=[]
     try:

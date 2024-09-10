@@ -1,4 +1,5 @@
 import sys
+from datetime import date
 import os
 import seaborn as sns
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
@@ -8,7 +9,7 @@ from PyQt6.QtCore import Qt, QDate
 from PyQt6.QtGui import QIcon, QPixmap, QFont
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from view.QSS.GraficsQSS import styleGrafics
-from controller.ControllerOtherMetods import dataGraficLineHistorySalesYear,dataGraficLineHistorySalesMonth,colorGenerator,optionsComboBoxGrafics,list_best_products,dataGraficLineHistorySalesDaily
+from controller.ControllerOtherMetods import dataGraficLineHistorySalesYear,dataGraficLineHistorySalesMonth,colorGenerator,optionsComboBoxGrafics,list_best_products,dataGraficLineHistorySalesDaily,numberMonth,all_products_invetory_Expire
 
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=3, dpi=100):
@@ -27,8 +28,14 @@ class Grafics(QWidget):
             base_path = os.path.abspath(".")
         return os.path.join(base_path, relative_path)
     
-    def __init__(self):
+    def __init__(self,typeReport):
         super().__init__()
+        self._typeReport=typeReport
+        self.dataDay=[]
+        self.dataMonth=[]
+        self.dataYear=[]
+        self.date_actualy=date.today()
+        self.label_cant_sell_infomation=QLabel("")
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.init_ui()
 
@@ -68,15 +75,16 @@ class Grafics(QWidget):
         canvas.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         # Datos para el gráfico de líneas
         palete_color_rgb=colorGenerator(1)
-        datos=dataGraficLineHistorySalesDaily('10-12-2022')
-        day=[item[0] for item in datos ]
-        sales=[item[1] for item in datos]
+        self.dataDay=dataGraficLineHistorySalesDaily(date_sale)
+        self.updateLabelCantSales(self.dataDay)
+        day=[item[0] for item in self.dataDay ]
+        sales=[item[1] for item in self.dataDay]
 
         # Crear el gráfico de líneas
         sns.barplot(x=day, y=sales, hue=day, ax=canvas.ax)
-        canvas.ax.set_xlabel("Fecha")
+        canvas.ax.set_xlabel(f"Fecha {date_sale}")
         canvas.ax.set_ylabel("Total venta")
-        canvas.ax.set_title(f"Histograma ventas totales")
+        canvas.ax.set_title(f"Histograma ventas totales {date_sale}")
         return canvas
     
 
@@ -89,9 +97,10 @@ class Grafics(QWidget):
 
         # Datos para el gráfico de líneas
         palete_color_rgb=colorGenerator(1)
-        datos=dataGraficLineHistorySalesMonth(month,year)
-        days=[item[0] for item in datos ]
-        sales=[item[1] for item in datos]
+        self.dataMonth=dataGraficLineHistorySalesMonth(month,year)
+        self.updateLabelCantSales(self.dataMonth)
+        days=[item[0] for item in self.dataMonth ]
+        sales=[item[1] for item in self.dataMonth]
 
         # Crear el gráfico de líneas
         sns.lineplot(x=days, y=sales, marker='o', color='b', linestyle='-', linewidth=2, ax=canvas.ax)
@@ -109,9 +118,10 @@ class Grafics(QWidget):
 
         # Datos para el gráfico de líneas
         palete_color_rgb=colorGenerator(1)
-        datos=dataGraficLineHistorySalesYear(year)
-        days=[item[0] for item in datos ]
-        sales=[item[1] for item in datos]
+        self.dataYear=dataGraficLineHistorySalesYear(year)
+        self.updateLabelCantSales(self.dataYear)
+        days=[item[0] for item in self.dataYear ]
+        sales=[item[1] for item in self.dataYear]
 
         # Crear el gráfico de líneas
         sns.lineplot(x=days, y=sales, marker='o', color='b', linestyle='-', linewidth=2, ax=canvas.ax)
@@ -120,10 +130,68 @@ class Grafics(QWidget):
         canvas.ax.set_title(f"ventas totales del año {year} por mes")
         return canvas
     
+    def updateGraficDay(self):
+        # self.sales_day=self.graficSalesDay(self.date_day.date().toString("yyyy-MM-dd"))
+        if hasattr(self, 'sales_day') and self.sales_day is not None:
+            self.sales_day.setParent(None)  # Elimina el widget de la gráfica anterior
 
+             # Actualizar la gráfica con la nueva fecha seleccionada
+        selected_date = self.date_day.date().toString("dd-MM-yyyy")
+        self.sales_day = self.graficSalesDay(str(selected_date))
+        
+        # Agregar la nueva gráfica al layout
+        self.layout_principal.addWidget(self.sales_day, 2, 1)
+    
+    def updateGraficMonth(self):
+        # self.sales_day=self.graficSalesDay(self.date_day.date().toString("yyyy-MM-dd"))
+        if hasattr(self, 'month_sales') and self.month_sales is not None:
+            self.month_sales.setParent(None)  # Elimina el widget de la gráfica anterior
+
+             # Actualizar la gráfica con la nueva fecha seleccionada
+        numMonth=numberMonth(self.unidComboBox.currentText())
+        self.month_sales = self.graficSalesMonth(str(numMonth),str(self.spiner_year.value()))
+        
+        # Agregar la nueva gráfica al layout
+        self.layout_principal.addWidget(self.month_sales, 2, 1)
+        
+    def contar_tuplas_validas(self,tuplas):
+        sum=0
+        for cont in range(0,len(tuplas),1):
+            if tuplas[cont][0]!=None and tuplas[cont][1]!=None:
+                sum=sum+1
+        return sum    
+
+    def updateYear(self):
+         # self.sales_day=self.graficSalesDay(self.date_day.date().toString("yyyy-MM-dd"))
+        if hasattr(self, 'year_sales') and self.year_sales is not None:
+            self.year_sales.setParent(None)  # Elimina el widget de la gráfica anterior
+
+             # Actualizar la gráfica con la nueva fecha seleccionada
+        
+        self.year_sales = self.graficSalesYear(str(self.spiner_year.value()))
+        
+        # Agregar la nueva gráfica al layout
+        self.layout_principal.addWidget(self.year_sales, 2, 1)
+
+    def updateLabelCantSales(self,data):
+        condition_day=self._typeReport=='day'
+        condition_month=self._typeReport=='month'
+        condition_year=self._typeReport=='year'
+        if condition_day:
+            self.label_cant_sell_infomation.setText(f"CANTIDAD PRODUCTOS \nVENDIDO {str(self.contar_tuplas_validas(data))}")
+        if condition_month:
+            self.label_cant_sell_infomation.setText(f"CANTIDAD PRODUCTOS \nVENDIDO {str(self.contar_tuplas_validas(data))}")
+        if condition_year:
+            self.label_cant_sell_infomation.setText(f"CANTIDAD PRODUCTOS \nVENDIDO {str(self.contar_tuplas_validas(data))}")
+        
+        
     def generate_form(self):
+        
+        condition_day=self._typeReport=='day'
+        condition_month=self._typeReport=='month'
+        condition_year=self._typeReport=='year'
         principalWidget = QWidget()
-        layout_principal = QGridLayout(principalWidget)
+        self.layout_principal = QGridLayout(principalWidget)
 
         widgetMenu = QWidget()
         layout_options = QGridLayout(widgetMenu)
@@ -140,53 +208,71 @@ class Grafics(QWidget):
         label_month.setObjectName("label_month")
         label_month.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        unidComboBox = QComboBox()
+        self.unidComboBox = QComboBox()
         options = optionsComboBoxGrafics()
-        unidComboBox.addItems(options)
-
+        self.unidComboBox.addItems(options)
+        self.unidComboBox.currentTextChanged.connect(self.updateGraficMonth)
+        
+        
+        
         label_day = QLabel("Escoja el Dia")
         label_day.setObjectName("label_day")
         label_day.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        date_day = QDateEdit(QDate.currentDate())
-        date_day.setObjectName("date_day")
-        date_day.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.date_day = QDateEdit(QDate.currentDate())
+        self.date_day.setObjectName("date_day")
+        self.date_day.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.date_day.dateChanged.connect(self.updateGraficDay)
 
         label_year = QLabel("Escriba el año")
         label_year.setObjectName("label_year")
         label_year.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        spiner_year = QSpinBox()
-        spiner_year.setObjectName("spiner_year")
-        spiner_year.setMaximum(3000)
-        spiner_year.setMinimum(2023)
-        spiner_year.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        # Agregar widgets al layout_principal de opciones
-        layout_options.addWidget(label_month,0,0)
-        layout_options.addWidget(unidComboBox,1,0)
-        layout_options.addWidget(label_day,0,1)
-        layout_options.addWidget(date_day,1,1)
-        layout_options.addWidget(label_year,0,2)
-        layout_options.addWidget(spiner_year,1,2)
+        self.spiner_year = QSpinBox()
+        self.spiner_year.setObjectName("spiner_year")
+        self.spiner_year.setMaximum(3000)
+        self.spiner_year.setMinimum(2022)
+        self.spiner_year.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        if condition_month:
+            self.spiner_year.valueChanged.connect(self.updateGraficMonth)
+        if condition_year:
+            self.spiner_year.valueChanged.connect(self.updateYear)
+        # Agregar widgets al self.layout_principal de opciones
+        if condition_day:
+            layout_options.addWidget(label_day,0,0)
+            layout_options.addWidget(self.date_day,1,0)
+        if condition_month:    
+            layout_options.addWidget(label_month,0,0)
+            layout_options.addWidget(self.unidComboBox,1,0)
+            layout_options.addWidget(label_year,0,1)
+            layout_options.addWidget(self.spiner_year,1,1)
+        if condition_year:    
+            layout_options.addWidget(label_year,0,0)
+            layout_options.addWidget(self.spiner_year,1,0)
 
         top_10=self.GraficTop10()
-        sales_day=self.graficSalesDay('10-12-2022')
-        month_sales=self.graficSalesMonth('12','2022')
-        year_sales=self.graficSalesYear('2022')
+        self.sales_day=""
+        self.month_sales=""
+        self.year_sales=""
+        if condition_day :   
+            self.sales_day=self.graficSalesDay(str(self.date_actualy))
+        if condition_month:
+            self.month_sales=self.graficSalesMonth(str(self.date_actualy.month),str(self.date_actualy.year))
+        if condition_year:
+            self.year_sales=self.graficSalesYear(str(self.date_actualy.year))
           # Crear un QScrollArea y colocar el widget dentro de ella
        
         widget_label_information=QWidget()
         widget_label_information.setObjectName("info")
         layout_information=QHBoxLayout(widget_label_information)
 
-        num_sales=2
-        label_cant_sell_infomation = QLabel(f"CANTIDAD PRODUCTOS \nVENDIDO {num_sales}")
-        label_cant_sell_infomation.setObjectName("label_cant")
-        label_cant_sell_infomation.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        num_sales=0
+        self.label_cant_sell_infomation = QLabel(f"CANTIDAD PRODUCTOS \nVENDIDO {num_sales}")
+        self.label_cant_sell_infomation.setObjectName("label_cant")
+        self.label_cant_sell_infomation.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
 
-        num_sales=2
+        num_sales=len(all_products_invetory_Expire())
         label_cant_EXPIRATION_infomation = QLabel(f"CANTIDAD PRODUCTOS \nVENCIDOS {num_sales}")
         label_cant_EXPIRATION_infomation.setObjectName("label_cant")
         label_cant_EXPIRATION_infomation.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -195,20 +281,31 @@ class Grafics(QWidget):
         label_cant_product_stock_infomation = QLabel(f"CANTIDAD PRODUCTOS  \nEN STOCK:{num_sales}")
         label_cant_product_stock_infomation.setObjectName("label_cant")
         label_cant_product_stock_infomation.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout_information.addWidget(label_cant_sell_infomation)
+        layout_information.addWidget(self.label_cant_sell_infomation)
         layout_information.addWidget(label_cant_EXPIRATION_infomation)
         layout_information.addWidget(label_cant_product_stock_infomation)
 
-        # Agregar widgets al layout_principal principal
-        layout_principal.addWidget(image_label_grafics, 0, 0, 1, 2)
-        layout_principal.addWidget(widgetMenu, 1, 0,1,2)
-        layout_principal.addWidget(top_10, 2, 0)
-        layout_principal.addWidget(sales_day, 2, 1)
-        layout_principal.addWidget(month_sales,3,0)
-        layout_principal.addWidget(year_sales,3,1)
-        layout_principal.addWidget(widget_label_information,4,0,1,2)
+        #TODO falta vincular el numero de ventas segun el numero de ventas que halla
+
+        # Agregar widgets al self.layout_principal principal
+        if condition_day:
+            self.layout_principal.addWidget(image_label_grafics, 0, 0, 1, 2)
+            self.layout_principal.addWidget(widgetMenu, 1, 0,1,2)
+            self.layout_principal.addWidget(top_10, 2, 0)
+            self.layout_principal.addWidget(self.sales_day, 2, 1)
+        if condition_month:
+            self.layout_principal.addWidget(image_label_grafics, 0, 0, 1, 2)
+            self.layout_principal.addWidget(widgetMenu, 1, 0,1,2)
+            self.layout_principal.addWidget(top_10, 2, 0)
+            self.layout_principal.addWidget(self.month_sales,2,1)
+        if condition_year:
+            self.layout_principal.addWidget(image_label_grafics, 0, 0, 1, 2)
+            self.layout_principal.addWidget(widgetMenu, 1, 0,1,2)
+            self.layout_principal.addWidget(top_10, 2, 0)
+            self.layout_principal.addWidget(self.year_sales,2,1)
+        self.layout_principal.addWidget(widget_label_information,3,0,1,2)
         
-        self.setLayout(layout_principal)
+        self.setLayout(self.layout_principal)
         
    
 def main():
